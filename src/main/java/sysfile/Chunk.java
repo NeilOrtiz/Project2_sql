@@ -158,36 +158,40 @@ public class Chunk {
 	}
 
 	public void append (int appended_size,String fileName,String pathFile){
+
+		if (!(appended_size>MAX_LENGTH)) {
+			String SourceFileName=pathFile+"\\"+fileName;
+			File f = new File(SourceFileName);
+			String fileName2=f.getName().split("_")[0];
+			long S=f.length();
+			int tempo=(int) S;
+			int diference=MAX_LENGTH-tempo;
 		
-		String SourceFileName=pathFile+"\\"+fileName;
-		File f = new File(SourceFileName);
-		String fileName2=f.getName().split("_")[0];
-		long S=f.length();
-		int tempo=(int) S;
-		int diference=MAX_LENGTH-tempo;
-	
-		if ((diference)<appended_size) {
-			//Refill last chunk with null
-			this.create(pathFile, fileName2, appended_size);
-		} else {
-			// Creating ramdon bytes
-			byte[] bytes = new byte[appended_size];
-			try {
-				SecureRandom.getInstanceStrong().nextBytes(bytes);
-			} catch (NoSuchAlgorithmException ex ) {
-				ex.printStackTrace();
-			}
-			// Append operation
-			if (f.exists()){
+			if ((diference)<appended_size) {
+				//Refill last chunk with null
+				this.create(pathFile, fileName2, appended_size);
+			} else {
+				// Creating ramdon bytes
+				byte[] bytes = new byte[appended_size];
 				try {
-					Files.write(f.toPath(),bytes,StandardOpenOption.APPEND);
-				} catch (IOException ex) {
+					SecureRandom.getInstanceStrong().nextBytes(bytes);
+				} catch (NoSuchAlgorithmException ex ) {
 					ex.printStackTrace();
 				}
-			} else {
-				System.out.println("[ERROR] File no exist. No possible to append");
+				// Append operation
+				if (f.exists()){
+					try {
+						Files.write(f.toPath(),bytes,StandardOpenOption.APPEND);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					System.out.println("[ERROR] File no exist. No possible to append");
+				}
 			}
-			
+		} else {
+			System.err.println("[ERROR] Size file bigger than 8192 bytes");
+			System.exit(-1);
 		}
 	}
 
