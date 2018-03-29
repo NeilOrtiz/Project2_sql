@@ -160,7 +160,7 @@ public class Chunk {
 		String SourceFileName=pathFile+"\\"+fileName;
 		File f = new File(SourceFileName);
 		String fileName2=f.getName().split("_")[0];
-		fileName2=fileName2+"\\.txt";
+		//fileName2=fileName2+"\\.txt";
 		long S=f.length();
 		int tempo=(int) S;
 		tempo=MAX_LENGTH-tempo;
