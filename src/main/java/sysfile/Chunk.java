@@ -168,11 +168,7 @@ public class Chunk {
 		} else {
 			//Refill last chunk with null
 			this.create(pathFile, fileName2, appended_size);
-
 		}
-
-
-
 	}
 
 	public int lastChunk(String fileName,String pathFile){
