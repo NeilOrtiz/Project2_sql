@@ -9,11 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-//import java.util.zip.CRC32;
-//import javax.swing.*;
 
 public class Chunk {
 	public static final int MAX_LENGTH=8192;
@@ -162,12 +162,30 @@ public class Chunk {
 		String fileName2=f.getName().split("_")[0];
 		fileName2=fileName2+"\\.txt";
 		long S=f.length();
+		int tempo=(int) S;
+		tempo=MAX_LENGTH-tempo;
+		System.out.println("Diferencia= "+tempo);
 
 		if ((MAX_LENGTH-S)<appended_size) {
-			// Append operation
-		} else {
 			//Refill last chunk with null
 			this.create(pathFile, fileName2, appended_size);
+		} else {
+			// Append operation
+			byte[] bytes = new byte[appended_size];
+			try {
+				SecureRandom.getInstanceStrong().nextBytes(bytes);
+			} catch (NoSuchAlgorithmException ex ) {
+				ex.printStackTrace();
+			}
+			//this.write(bytes, pathFile+"\\"+fileName);
+
+			try {
+				Files.write(f.toPath(),bytes,StandardOpenOption.APPEND);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			
+			
 		}
 	}
 
